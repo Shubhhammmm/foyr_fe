@@ -39,42 +39,36 @@ export default {
   methods: {
     setupCanvas() {
       this.canvas = new fabric.Canvas('canvas', {
-        width: 800,
-        height: 400,
+        width: window.innerWidth >= 1000 ? 800 : window.innerWidth - 100,
+        height: window.innerWidth <= 770 ? window.innerHeight / 2 - 70 : 500,
         backgroundColor: '#fff'
       })
 
-      // Set the default drawing mode (pencil)
       this.setPencilTool()
 
       this.loadFromLocalStorage()
 
-      // Handle sending drawing to the socket
       this.canvas.on('path:created', this.sendDrawing)
 
       this.canvas.on('object:added', this.saveToLocalStorage)
       this.canvas.on('object:modified', this.saveToLocalStorage)
 
-      // Handle drawing shapes
       this.canvas.on('mouse:down', this.onMouseDown)
       this.canvas.on('mouse:move', this.onMouseMove)
       this.canvas.on('mouse:up', this.onMouseUp)
 
-      // Initially set the cursor to pencil
       this.updateCursor()
     },
     saveToLocalStorage() {
-      
       const canvasJSON = JSON.stringify(this.canvas.toDatalessJSON())
-      localStorage.setItem(`whiteboardCanvas-${this.user.name}`,canvasJSON);
-      console.log(this.user.name);
-      
+      localStorage.setItem(`whiteboardCanvas-${this.user.name}`, canvasJSON)
+      console.log(this.user.name)
     },
 
-    // Load canvas state from localStorage
     loadFromLocalStorage() {
-     
-      const savedCanvas = localStorage.getItem(`whiteboardCanvas-${this.user.name}`);
+      console.log(window.innerWidth, window.innerHeight)
+
+      const savedCanvas = localStorage.getItem(`whiteboardCanvas-${this.user.name}`)
       if (savedCanvas) {
         this.canvas.loadFromJSON(savedCanvas, () => {
           this.canvas.renderAll()
@@ -82,12 +76,10 @@ export default {
       }
     },
 
-    // Option to manually save the canvas if desired
     saveCanvasManually() {
       this.saveToLocalStorage()
     },
 
-    // Option to manually load the canvas if desired
     loadCanvasManually() {
       this.loadFromLocalStorage()
     },
@@ -95,7 +87,7 @@ export default {
     clearCanvas() {
       this.canvas.clear()
       this.canvas.setBackgroundColor('#fff')
-      localStorage.removeItem('whiteboardCanvas') // Clear from localStorage
+      localStorage.removeItem('whiteboardCanvas')
     },
 
     setupSocket() {
@@ -134,17 +126,15 @@ export default {
         this.setPencilTool()
       } else if (tool === 'eraser') {
         this.canvas.isDrawingMode = true
-        this.canvas.freeDrawingBrush.color = '#fff' // Eraser set to white
+        this.canvas.freeDrawingBrush.color = '#fff'
       } else {
         this.canvas.isDrawingMode = false
       }
 
-      // Update the cursor based on the tool selected
       this.updateCursor()
     },
 
     updateCursor() {
-      // Get the canvas DOM element
       const canvasElement = this.canvas.upperCanvasEl
 
       if (this.currentTool === 'pencil') {
@@ -177,7 +167,6 @@ export default {
       this.canvas.setBackgroundColor('#fff')
     },
 
-    // Mouse event handlers for custom shapes (rectangle, circle, line)
     onMouseDown(event) {
       const pointer = this.canvas.getPointer(event.e)
 
@@ -215,7 +204,7 @@ export default {
         this.canvas.add(this.drawingObject)
       } else if (this.currentTool === 'eraser') {
         this.canvas.isDrawingMode = true
-        this.canvas.freeDrawingBrush.color = '#fff' // Eraser set to white
+        this.canvas.freeDrawingBrush.color = '#fff'
       }
     },
 
@@ -270,13 +259,11 @@ export default {
   /* height: 100vh; */
   overflow-y: scroll;
   overflow-x: hidden;
-  
 }
 canvas {
   border: 1px solid #ddd;
 }
 
-/* Add the custom cursor CSS classes for pencil and eraser */
 .pencil-cursor {
   cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000" viewBox="0 0 512 512" width="20" height="20"><path d="M497.9 142.1L369.9 14.1c-18.7-18.7-49.1-18.7-67.9 0L27.9 289.1c-5.9 5.9-9.4 13.8-9.9 22.2l-16 160c-1.4 13.6 3.7 27 13.7 37s23.4 15.1 37 13.7l160-16c8.4-.5 16.3-4 22.2-9.9l274-274c18.8-18.8 18.8-49.2 0-68zM124.1 312L312 124.1l76 76L200.1 388l-99.9 11.1 11.1-99.9zm247.8-18.5L218.5 446.9c-.8.8-1.9 1.2-3 1.1l-85.2-8.5 83.4-83.4 160.5-160.5 76 76-79.3 79.3z"/></svg>'),
     auto;

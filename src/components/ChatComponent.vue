@@ -6,10 +6,10 @@
       </div>
     </div>
     <div class="input-container">
-      <input 
-        v-model="message" 
-        @keyup.enter="sendMessage" 
-        placeholder="Type a message" 
+      <input
+        v-model="message"
+        @keyup.enter="sendMessage"
+        placeholder="Type a message"
         class="message-input"
       />
       <button @click="sendMessage" class="send-button">Send</button>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import io from 'socket.io-client';
+import io from 'socket.io-client'
 
 export default {
   props: ['user'],
@@ -27,32 +27,31 @@ export default {
       socket: null,
       message: '',
       messages: []
-    };
+    }
   },
   mounted() {
-    this.socket = io('https://foyr-be.onrender.com');
-    
+    this.socket = io('https://foyr-be.onrender.com')
+
     this.socket.on('newMessage', (msg) => {
-      this.messages.push(msg);
-      this.scrollToBottom();  // Scroll to the latest message
-    });
+      this.messages.push(msg)
+      this.scrollToBottom()
+    })
   },
   methods: {
     sendMessage() {
       if (this.message) {
-        const msg = { user: this.user.name, text: this.message };
-        this.socket.emit('sendMessage', msg);
-        this.message = '';  // Clear input after sending
+        const msg = { user: this.user.name, text: this.message }
+        this.socket.emit('sendMessage', msg)
+        this.message = ''
       }
     },
     scrollToBottom() {
-      const messagesContainer = this.$el.querySelector('.messages');
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      const messagesContainer = this.$el.querySelector('.messages')
+      messagesContainer.scrollTop = messagesContainer.scrollHeight
     }
   }
-};
+}
 </script>
-
 
 <style scoped>
 .chat-container {
@@ -118,4 +117,3 @@ export default {
   background-color: #0056b3;
 }
 </style>
-

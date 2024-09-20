@@ -9,33 +9,32 @@
 </template>
 
 <script>
-import LoginComponent from './components/LoginComponent.vue';
-import WhiteboardComponent from './components/WhiteboardComponent.vue';
-import ChatComponent from './components/ChatComponent.vue';
+import LoginComponent from './components/LoginComponent.vue'
+import WhiteboardComponent from './components/WhiteboardComponent.vue'
+import ChatComponent from './components/ChatComponent.vue'
 
 export default {
   components: {
     LoginComponent,
     WhiteboardComponent,
-    ChatComponent,
+    ChatComponent
   },
   data() {
     return {
       loggedIn: false,
-      user: null,
-    };
+      user: null
+    }
   },
   methods: {
     onLoginSuccess(user) {
-      this.user = user;
-      this.loggedIn = true;
-    },
-  },
-};
+      this.user = user
+      this.loggedIn = true
+    }
+  }
+}
 </script>
 
 <style scoped>
-/* Main App Container */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -48,7 +47,6 @@ export default {
   margin: 0;
 }
 
-/* Content layout when logged in */
 .app-content {
   display: flex;
   width: 100%;
@@ -60,7 +58,14 @@ export default {
   overflow: hidden;
 }
 
-/* Whiteboard Section */
+@media screen and (max-width: 768px) {
+  .app-content {
+    flex-direction: column;
+    height: 100%;
+    overflow: scroll;
+  }
+}
+
 .whiteboard-section {
   flex: 2;
   background-color: #fafafa;
@@ -71,7 +76,6 @@ export default {
   justify-content: center;
 }
 
-/* Chat Section */
 .chat-section {
   flex: 1;
   background-color: #f9f9f9;
@@ -80,9 +84,7 @@ export default {
   flex-direction: column;
 }
 
-/* Make the chat window scrollable */
 .chat-section {
   overflow-y: auto;
 }
-
 </style>
